@@ -1,16 +1,14 @@
 const express = require('express'); 
 const router = express.Router();
 
-const userCtrl = require('../controllers/user'); 
-const passwordValidator = require('../models/password');
+const userCtrl = require('../controllers/user');
 const passwordValidation = require('../middleware/password-validation');
+const emailValidation = require('../middleware/email-validation');
 
 // inscription
-router.post('/signup', passwordValidator, passwordValidation, userCtrl.signup);
+router.post('/signup', emailValidation, passwordValidation, userCtrl.signup);
 
 // connexion
-router.post('/login', passwordValidator, passwordValidation, userCtrl.login);
-
-
+router.post('/login', emailValidation, passwordValidation, userCtrl.login);
 
 module.exports = router; 

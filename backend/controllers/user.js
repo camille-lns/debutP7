@@ -1,24 +1,20 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-const crypto = require('crypto-js');
-const { Sequelize, DataTypes } = require('sequelize'); 
-const sequelize = new Sequelize('groupomania', 'root', '2602', {
-    host: 'localhost',
-    dialect: 'mysql' 
-});
+const cryptoJS = require('crypto-js');
 
-require('dotenv').config({path: '../config.env'});
+require('dotenv').config()
 
 const TOKEN = process.env.TOOKEN;
 
 // pour crypto
-const key = crypto.enc.Base64.parse(process.env.CR_KEY);
-const iv = crypto.enc.Base64.parse(process.env.CR_IV);
+const key = cryptoJS.enc.Base64.parse(process.env.CR_KEY);
+const iv = cryptoJS.enc.Base64.parse(process.env.CR_IV);
 
 // inscription
+
 exports.signup = ((req,res,next) =>{
-    const codedEmail = crypto.AES.encrypt(req.body.email, key, {iv:iv}).toString();
+    const codedEmail = cryptoJS.AES.encrypt(req.body.email, key, {iv:iv}).toString();
     User.findOne({where: {email:codedEmail}})
     .then(user => {
         if (user)
@@ -40,8 +36,9 @@ exports.signup = ((req,res,next) =>{
 });
 
 // connexion
+
 exports.login =((req, res, next) =>{
-    const codedEmail = crypto.AES.encrypt(req.body.email, key, {iv:iv}).toString();
+    const codedEmail = cryptoJS.AES.encrypt(req.body.email, key, {iv:iv}).toString();
     User.findOne({where: {email: codedEmail}})
     .then(user =>{
         if (!user) { 
