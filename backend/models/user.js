@@ -6,7 +6,7 @@ const sequelize = new Sequelize('groupomania', 'root', '2602', {
 });
 
 const User = sequelize.define('User', {
-    userId: {
+    id: {
         type: DataTypes.INTEGER, 
         autoIncrement: true, 
         primaryKey: true

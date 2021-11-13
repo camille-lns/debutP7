@@ -6,7 +6,7 @@ exports.createPost = (req, res, next) => {
     Post.create({
         text: req.body.text,
         userId: req.body.userId,
-        imgUrl: imageUrl
+        imgUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     })
     .then(() => res.status(201).json({message:"Nouveau post créé"}))
     .catch(err => res.status(500).json({err}));
@@ -36,6 +36,3 @@ exports.deletePost = (req, res, next) => {
         .catch(error => res.status(500).json({ error }));
 };
 
-
-
-// `${req.protocol}://${req.get('host')}/images/${req.file.filename}`

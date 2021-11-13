@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 const cryptoJS = require('crypto-js');
+const { sequelize } = require('../models/user');
 
 require('dotenv').config()
 
@@ -12,9 +13,9 @@ const key = cryptoJS.enc.Base64.parse(process.env.CR_KEY);
 const iv = cryptoJS.enc.Base64.parse(process.env.CR_IV);
 
 // inscription
-
-exports.signup = ((req,res,next) =>{
+exports.signup = ((req,res,next) => {
     const codedEmail = cryptoJS.AES.encrypt(req.body.email, key, {iv:iv}).toString();
+    console.log(req.body.email);
     User.findOne({where: {email:codedEmail}})
     .then(user => {
         if (user)
@@ -22,7 +23,7 @@ exports.signup = ((req,res,next) =>{
         bcrypt.hash(req.body.password, 10)
         .then(hashed =>{
             User.create({
-                lastName:req.body.name,
+                lastName: req.body.lastName,
                 firstName: req.body.firstName, 
                 email:codedEmail, 
                 password: hashed
@@ -36,8 +37,7 @@ exports.signup = ((req,res,next) =>{
 });
 
 // connexion
-
-exports.login =((req, res, next) =>{
+exports.login = ((req, res, next) =>{
     const codedEmail = cryptoJS.AES.encrypt(req.body.email, key, {iv:iv}).toString();
     User.findOne({where: {email: codedEmail}})
     .then(user =>{
@@ -65,3 +65,20 @@ exports.login =((req, res, next) =>{
 });
 
 
+// récupérer un profil 
+exports.getOneUser = (req, res, next) => {
+    User.findOne({ where: { id: req.params.id } })
+        .then(user => res.status(200).json({ user }))
+        .catch(error => res.status(404).json({ error }))
+};
+
+// supprimer un utilisateur 
+exports.deleteUserAccount = (req, res, next) => {
+    User.findOne({ where: { id: req.params.id } })
+    .then(user => {
+        user.destroy()
+        .then(() => res.status(201).json({message: "utilisateur supprimé"}))
+        .catch(err => res.status(500).json({err}));
+    })
+    .catch(error => res.status(500).json({error}));
+};

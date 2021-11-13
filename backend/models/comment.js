@@ -19,7 +19,7 @@ const Comment = sequelize.define('Post', {
         type: DataTypes.STRING,
         allowNull: false
     },
-    PostId:{
+    postId:{
         type:DataTypes.INTEGER,
         allowNull: false 
     }

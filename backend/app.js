@@ -1,4 +1,5 @@
 const { Sequelize } = require('sequelize');
+const bodyParser = require('body-parser');
 const express = require('express'); 
 const app = express(); 
 
@@ -13,6 +14,8 @@ const sequelize = new Sequelize('groupomania', 'root', '2602', {
 sequelize.authenticate()
     .then(() => console.log('Connexion réussie'))
     .catch(() => console.log('Connexion échouée'));
+
+app.use(bodyParser.json());
 
 app.use((req,res,next) =>{
     res.setHeader('Access-Control-Allow-Origin', '*');
