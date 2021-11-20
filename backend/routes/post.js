@@ -22,7 +22,7 @@ router.get('/');
 
 
 // ajouter ou retirer un like 
-router.post('/:id/like');
+router.post('/:id/like', postCtrl.like);
 
 
 

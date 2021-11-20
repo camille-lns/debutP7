@@ -24,7 +24,7 @@ exports.updateComment = (req, res, next) => {
     if(!req.body.userId || (req.body.userId != req.body.posterId)) 
         return res.status(401).json({message : "Modification de commentaire non autorisée"})
 
-    Commentaire.update( { text: req.body.text}, {
+    Comment.update( { text: req.body.text}, {
         where: {
             id : req.params.id,
             UserId : req.body.userId
@@ -42,6 +42,8 @@ exports.deleteComment = (req, res, next) => {
         Comment.destroy({where: {id: req.params.id}})
         .then(()=> res.status(200).json({message: "Suppression effectuée"}))
         .catch(error => res.status(500).json(error));
-}
+};
+
+
 
 
