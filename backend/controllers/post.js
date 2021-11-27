@@ -20,26 +20,33 @@ exports.createPost = (req, res, next) => {
 
 // modifier un post 
 exports.updatePost = (req, res, next) => {
-    if(!req.body.userId || (req.body.userId != req.body.posterId)) {
-        return res.status(401).json({error : "Modification non autorisée"})
+    if(!req.body.userId) {
+        return res.status(401).json({error : "Modification non conforme"})
     }
-
     Post.update({text: req.body.text}, {where:{id:req.params.id}})
-    .then(() => res.status(200).json())
+    .then(() => res.status(200).json({message : "Post modifié avec succès"}))
     .catch(err => res.status(500).json(err));
 };
 
 // supprimer un post 
 exports.deletePost = (req, res, next) => {
-    if(!req.body.userId || (req.body.userId != req.body.posterId)) {
+    if(!req.body.userId) {
         return res.status(401).json({error : "Suppression non autorisée"})
     }
 
     Post.findOne({where:{id:req.params.id}})
         .then(post => {console.log(post); 
             post.destroy();
+            res.status(200).json({message:"Post supprimé avec succès"});
         })
-        .catch(error => res.status(500).json({ error }));
+        .catch(error => res.status(500).json({ message:"Erreur dans la suppression du post" }));
+};
+
+//récupérer les likes d'un post 
+exports.getPostLikes = (req,res,next) =>{
+    sequelize.query(`SELECT * FROM likes WHERE PostId = ${req.params.id} AND isActive=true `, {type: sequelize.QueryTypes.SELECT})
+    .then(likes => {res.status(200).json(likes)})
+    .catch(err => res.status(500).json(err));
 };
 
 // likes

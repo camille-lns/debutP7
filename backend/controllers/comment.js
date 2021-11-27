@@ -19,9 +19,22 @@ exports.addComment = (req, res, next) => {
     .catch(error => res.status(404).json({ error }));
 };
 
+// récupérer tous les commentaires du post 
+exports.findComments = (req, res, next) =>{
+    sequelize.query(`SELECT comment.text, comment.id, users.firstName, users.lastName, comment.UserId, comment.createdAt FROM comment, Posts, Users WHERE comment.PostId = 
+        ${req.params.id} AND posts.id = ${req.params.id} AND users.id = comment.UserId`,
+    { type: sequelize.QueryTypes.SELECT})
+    .then(comments => {
+        for (let comment of comments)
+            comment.text = decodeURIComponent(comment.text);
+        res.status(200).json({comments})
+    })
+    .catch(error => res.status(404).json({error}));
+};
+
 // modifier un commentaire 
 exports.updateComment = (req, res, next) => {
-    if(!req.body.userId || (req.body.userId != req.body.posterId)) 
+    if(!req.body.userId) 
         return res.status(401).json({message : "Modification de commentaire non autorisée"})
 
     Comment.update( { text: req.body.text}, {
@@ -36,13 +49,14 @@ exports.updateComment = (req, res, next) => {
 
 // supprimer un commentaire 
 exports.deleteComment = (req, res, next) => {
-    if(!req.body.userId || (req.body.userId != req.body.posterId)) 
+    if(!req.body.userId) 
         return res.status(401).json({message : "Suppression de commentaire non autorisée"})
 
         Comment.destroy({where: {id: req.params.id}})
         .then(()=> res.status(200).json({message: "Suppression effectuée"}))
         .catch(error => res.status(500).json(error));
 };
+
 
 
 

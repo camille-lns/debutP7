@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
         const decodedToken = jwt.verify(token, TOKEN);
         const userId = decodedToken.userId; 
         
-        // pour comparaison entre sauce.userId et userId actuel
+        // pour comparaison entre post.userId et userId actuel
         req.body.decodedId = userId;
 
         if (req.body.userId && req.body.userId !== userId) {
@@ -18,7 +18,6 @@ module.exports = (req, res, next) => {
             next();        
         }
     } catch {
-        res.status(401).json({error: new Error('Erreur')
-        });
+        res.status(401).json({error: new Error('Erreur')});
     }
 };
