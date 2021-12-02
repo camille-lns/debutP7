@@ -43,11 +43,11 @@
                 </b-form-group>
 
                 <center><b-button
-                  v-on:click.stop="login()"
+                  v-on:click.stop="signup()"
                   type="submit"
-                  id="login-button"
+                  id="signup-button"
                   class="account-btn font-weight-bold"
-                  aria-label="Connexion"
+                  aria-label="Inscription"
                 >
                   Inscription
                 </b-button></center>
@@ -74,9 +74,51 @@
 import NavigationOffline from '../components/NavigationOffline.vue'
 
 export default {
-    name: 'Signup', 
+    name: 'Signup',
     components: {
         NavigationOffline, 
+    },
+    data() {
+        return {
+            inputSignup: {
+                lastname: "",
+                firstname: "",
+                email: "",
+                password: ""
+            }
+        }
+    },
+    methods: {
+        signup() {
+            let inputDatas = {
+                "lastname": this.inputSignup.lastname,
+                "firstname": this.inputSignup.firstname,
+                "email": this.inputSignup.email,
+                "password": this.inputSignup.password
+            }
+            console.log(inputDatas)
+            let url = "http://localhost:3000/api/auth/signup"
+            let options = {
+                method: "POST",
+                body: JSON.stringify(inputDatas),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            console.log(options)
+            fetch(url, options)
+                .then(res => res.json())
+                .then((res) => {
+                    /*if (res.userId && res.token){*/
+                    localStorage.setItem("userId", res.userId);
+                    localStorage.setItem("token", res.token);
+                    console.log(localStorage)
+                    this.$router.push("/");
+                    alert("Bienvenue sur Groupomania Connect ! Connectez-vous dès à présent !");
+                    /*} */
+                })
+                .catch(error => console.log(error))
+        }
     }
 }
 

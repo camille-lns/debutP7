@@ -23,6 +23,10 @@ const Post = sequelize.define('Post', {
         type: DataTypes.STRING,
         allowNull: true,
     },
+    postLikes: {
+        type: DataTypes.NUMBER, 
+        allowNull: true
+    }
 }, 
     {
     tableName:'Posts'

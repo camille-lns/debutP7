@@ -15,6 +15,7 @@
                   <b-form-input
                     id="email"
                     type="email"
+                    name="'email"
                     placeholder="Email"
                     class="acc-input text-dark mb-2 mt-4 pl-3 w-100"
                     aria-label="Écrire votre adresse mail"
@@ -22,6 +23,7 @@
                   <b-form-input
                     id="password"
                     type="password"
+                    name="password"
                     placeholder="Mot de passe"
                     class="acc-input text-dark mb-2 pl-3 w-100"
                     aria-label="Écrire votre mot de passe"
@@ -58,11 +60,52 @@
 
 <script>
 import NavigationOffline from '../components/NavigationOffline.vue'
+import router from '../router/index'
 
 export default {
-    name: 'Login', 
+    name: 'Login',
     components: {
         NavigationOffline, 
+    },
+    data() {
+        return {
+            inputLogin: {
+                email: "",
+                password: ""
+            }
+        }
+    },
+    methods: {
+        login() {
+            let loginDatas = {
+                "email": this.inputLogin.email,
+                "password": this.inputLogin.password
+            }
+            console.log(loginDatas)
+            let url = "http://localhost:3000/api/auth/login"
+            let options = {
+                method: "POST",
+                body: JSON.stringify(loginDatas),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }
+            fetch(url, options)
+                .then(res => res.json())
+                .then((res) => {
+                    if (res.userId && res.token) {
+                        localStorage.setItem("userId", res.userId)
+                        localStorage.setItem("token", res.token)
+                        localStorage.setItem("isAdmin", res.isAdmin);
+                        console.log(localStorage)
+                        this.$router.push("message");
+                        alert(" 🙋‍♂️ Bienvenue sur Groupomania Connect ! Connectez-vous dès à présent ! 🙋‍♀️");
+                    } else {
+                        alert(" 🚨 Mot de passe incorrect ! ");
+                    }
+                })
+                .catch(error => console.log(error))
+        }
     }
 }
 

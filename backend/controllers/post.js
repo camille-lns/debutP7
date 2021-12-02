@@ -1,7 +1,6 @@
 const { sequelize } = require('../models/post');
 const Post = require('../models/post');
 const Like = require('../models/like'); 
-const fs = require('fs');
 
 // créer un post 
 exports.createPost = (req, res, next) => {
@@ -46,7 +45,7 @@ exports.deletePost = (req, res, next) => {
 exports.getPostLikes = (req,res,next) =>{
     sequelize.query(`SELECT * FROM likes WHERE PostId = ${req.params.id} AND isActive=true `, {type: sequelize.QueryTypes.SELECT})
     .then(likes => {res.status(200).json(likes)})
-    .catch(err => res.status(500).json(err));
+    .catch(error => res.status(500).json(error));
 };
 
 // likes
@@ -60,7 +59,8 @@ exports.like = (req,res,next) =>{
                 PostId: req.params.id,
                 Active: true
             })
-            .then(() => res.status(201).json({message:"Like ajouté"}))
+            .then(() => 
+                res.status(201).json({message:"Like ajouté"}))
             .catch(error => res.status(400).json(error))
         }
         else // le like est déjà existant, on l'active ou le désactive au clic
