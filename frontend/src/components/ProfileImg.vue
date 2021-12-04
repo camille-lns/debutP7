@@ -14,6 +14,7 @@ export default {
     name: 'ProfileImage',
     props: ['customClass', 'divCustomClass', 'src']
 }
+
 </script>
 
 

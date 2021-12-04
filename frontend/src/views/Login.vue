@@ -19,6 +19,7 @@
                     placeholder="Email"
                     class="acc-input text-dark mb-2 mt-4 pl-3 w-100"
                     aria-label="Écrire votre adresse mail"
+                    v-model="inputLogin.email"
                   ></b-form-input>
                   <b-form-input
                     id="password"
@@ -27,6 +28,7 @@
                     placeholder="Mot de passe"
                     class="acc-input text-dark mb-2 pl-3 w-100"
                     aria-label="Écrire votre mot de passe"
+                    v-model="inputLogin.password"
                   ></b-form-input>
                 </b-form-group>
 
@@ -86,22 +88,18 @@ export default {
             let options = {
                 method: "POST",
                 body: JSON.stringify(loginDatas),
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: { 'Content-Type': 'application/json' }
             }
             fetch(url, options)
                 .then(res => res.json())
                 .then((res) => {
-                    if (res.userId && res.token) {
-                        localStorage.setItem("userId", res.userId)
-                        localStorage.setItem("token", res.token)
-                        localStorage.setItem("isAdmin", res.isAdmin);
+                    if (res.userId) {
+                        localStorage.setItem("userId", res.userId);
                         console.log(localStorage)
                         this.$router.push("message");
-                        alert(" 🙋‍♂️ Bienvenue sur Groupomania Connect ! Connectez-vous dès à présent ! 🙋‍♀️");
+                        alert("Bienvenue sur Groupomania Connect ! Connectez-vous dès à présent !");
                     } else {
-                        alert(" 🚨 Mot de passe incorrect ! ");
+                        alert("Mot de passe incorrect");
                     }
                 })
                 .catch(error => console.log(error))

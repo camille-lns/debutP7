@@ -31,7 +31,8 @@ exports.signup = (req,res,next) => {
                 firstName: req.body.firstName, 
                 email:codedEmail, 
                 profilPictureUrl: `${req.protocol}://${req.get('host')}/images/profilepic.png`,
-                password: hashed
+                password: hashed, 
+                role: user
             })
             .then(() => res.status(201).json({message: "utilisateur créé"}))
             .catch(error => res.status(400).json({error}));

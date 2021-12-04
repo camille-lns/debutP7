@@ -2,6 +2,7 @@ const { Sequelize } = require('sequelize');
 const bodyParser = require('body-parser');
 const express = require('express'); 
 const app = express(); 
+const helmet = require('helmet');
 
 const userRoutes = require('./routes/user'); 
 const postRoutes = require('./routes/post');
@@ -16,6 +17,7 @@ sequelize.authenticate()
     .catch(() => console.log('Connexion échouée'));
 
 app.use(bodyParser.json());
+app.use(helmet());
 
 app.use((req,res,next) =>{
     res.setHeader('Access-Control-Allow-Origin', '*');

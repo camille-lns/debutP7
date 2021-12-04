@@ -41,6 +41,17 @@ exports.deletePost = (req, res, next) => {
         .catch(error => res.status(500).json({ message:"Erreur dans la suppression du post" }));
 };
 
+// afficher les posts sur la page principale 
+exports.findPosts = (req,res,next) => {
+    sequelize.query('SELECT firstName, lastName, posts.id, posts.createdAt, text, posts.userId, users.profilPictureUrl, posts.imgUrl FROM users, posts WHERE posts.userId = users.id ORDER BY posts.id DESC', { type: sequelize.QueryTypes.SELECT})
+    .then(posts => {
+        for (let post of posts)
+            post.text = decodeURIComponent(post.text);
+        res.status(200).json({posts})
+    })
+    .catch(error => res.status(404).json({error}));
+};
+
 //récupérer les likes d'un post 
 exports.getPostLikes = (req,res,next) =>{
     sequelize.query(`SELECT * FROM likes WHERE PostId = ${req.params.id} AND isActive=true `, {type: sequelize.QueryTypes.SELECT})

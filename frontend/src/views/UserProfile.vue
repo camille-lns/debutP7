@@ -12,10 +12,8 @@
                             divCustomClass="divUserPP"
                             />
                             <p class="user-name">
-                            Prénom Nom
+                            {{ userAccount.firstname }} {{ userAccount.lastname }}
                             </p>
-
-                            <p>Poste occupé dans l'entreprise</p>
 
                             <b-button size="sm">Editer</b-button>
                         </div>
@@ -39,7 +37,73 @@ export default {
         Navigation, 
         ProfileImg,
         UserPosts
-    }
+    }, 
+    data() {
+        return {
+            userAccount: {
+                userId: localStorage.getItem("userId"),
+                firstname: "",
+                lastname: ""
+            },
+            inputAccount: {
+                lastname: "",
+                firstname: ""
+            }
+        }
+    },
+    mounted() {
+        let url = `http://localhost:3000/api/auth/${ this.userAccount.userId }`;
+        let options = {
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token"),
+            }
+        };
+        fetch(url, options)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                this.userAccount.firstname = data.firstname;
+                this.userAccount.lastname = data.lastname;
+            })
+            .catch(error => console.log(error))
+    },
+    methods: {
+        getOneAccount() {
+            let url = `http://localhost:3000/api/auth/${ this.userAccount.userId }`;
+            let options = {
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                }
+            };
+            fetch(url, options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    this.userAccount.firstname = data.firstname;
+                    this.userAccount.lastname = data.lastname;
+                })
+                .catch(error => console.log(error))
+        },
+        deleteAccount() {
+            let url = `http://localhost:3000/api/auth/${ this.userAccount.userId }`;
+            let options = {
+                method: "DELETE",
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                }
+            };
+            fetch(url, options)
+                .then((response) => {
+                    console.log(response);
+                    localStorage.clear();
+                    alert("Suppression du compte confirmée ! 😢");
+                })
+                .then(this.$router.push("/signup"))
+                .catch(error => console.log(error))
+        },
+    },
 }
 
 
