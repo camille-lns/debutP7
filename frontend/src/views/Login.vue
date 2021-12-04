@@ -62,7 +62,6 @@
 
 <script>
 import NavigationOffline from '../components/NavigationOffline.vue'
-import router from '../router/index'
 
 export default {
     name: 'Login',
@@ -84,7 +83,7 @@ export default {
                 "password": this.inputLogin.password
             }
             console.log(loginDatas)
-            let url = "http://localhost:3000/api/auth/login"
+            let url = "http://localhost:3000/api/users/login"
             let options = {
                 method: "POST",
                 body: JSON.stringify(loginDatas),
@@ -95,9 +94,10 @@ export default {
                 .then((res) => {
                     if (res.userId) {
                         localStorage.setItem("userId", res.userId);
+                        localStorage.setItem("token", res.token);
                         console.log(localStorage)
-                        this.$router.push("message");
-                        alert("Bienvenue sur Groupomania Connect ! Connectez-vous dès à présent !");
+                        this.$router.push({ query: { redirect: '/posts/home' } });
+
                     } else {
                         alert("Mot de passe incorrect");
                     }

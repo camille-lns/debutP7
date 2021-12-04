@@ -104,13 +104,13 @@ export default {
                 "password": this.inputSignup.password
             }
             console.log(inputDatas)
-            let url = "http://localhost:3000/api/auth/signup"
+            let url = "http://localhost:3000/api/users/signup"
             let options = {
                 method: "POST",
                 body: JSON.stringify(inputDatas),
                 headers: { 'Content-Type': 'application/json'}
             }
-            console.log(options)
+            console.log(options);
             fetch(url, options)
                 .then(res => res.json())
                 .then((res) => {

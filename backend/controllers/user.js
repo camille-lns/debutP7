@@ -45,6 +45,7 @@ exports.signup = (req,res,next) => {
 // connexion
 exports.login = (req, res, next) =>{
     const codedEmail = cryptoJS.AES.encrypt(req.body.email, key, {iv:iv}).toString();
+    console.log(codedEmail);
     User.findOne({where: {email: codedEmail}})
     .then(user =>{
         if (!user) { 
