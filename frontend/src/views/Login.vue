@@ -34,7 +34,7 @@
 
                 <center><b-button
                   v-on:click.stop="login()"
-                  type="submit"
+                  type="button"
                   id="login-button"
                   class="account-btn font-weight-bold"
                   aria-label="Connexion"
@@ -62,6 +62,7 @@
 
 <script>
 import NavigationOffline from '../components/NavigationOffline.vue'
+import router from "../router/index";
 
 export default {
     name: 'Login',
@@ -96,7 +97,7 @@ export default {
                         localStorage.setItem("userId", res.userId);
                         localStorage.setItem("token", res.token);
                         console.log(localStorage)
-                        this.$router.push({ query: { redirect: '/posts/home' } });
+                        this.$router.push('/home');
 
                     } else {
                         alert("Mot de passe incorrect");

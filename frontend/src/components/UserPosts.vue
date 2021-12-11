@@ -8,7 +8,7 @@
                     </b-col>
                     <b-col md="10">
                         <b-card-body>
-                            <h4>Prénom Nom</h4>
+                            <h4>{{ userAccount.firstName }} {{ userAccount.lastName }}</h4>
                         <b-card-text>
                             This is a wider card with supporting text as a natural lead-in to additional content.
                             This content is a little bit longer. This is a wider card with supporting text as a natural lead-in to additional content.
@@ -45,7 +45,71 @@
 </template>
 
 <script> 
-
+export default {
+    name: 'UserPosts',  
+    data() {
+        return {
+            userAccount: {
+                userId: localStorage.getItem("userId"),
+                firstname: "",
+                lastname: ""
+            }
+        }
+    },
+    mounted() {
+        let url = `http://localhost:3000/api/users/${ this.userAccount.userId }`;
+        let options = {
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem("token"),
+            }
+        };
+        fetch(url, options)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                this.userAccount.firstName = data.firstName;
+                this.userAccount.lastName = data.lastName;
+            })
+            .catch(error => console.log(error))
+    },
+    methods: {
+        getOneAccount() {
+            let url = `http://localhost:3000/api/users/${ this.userAccount.userId }`;
+            let options = {
+                method: "GET",
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                }
+            };
+            fetch(url, options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data)
+                    this.userAccount.firstName = data.firstName;
+                    this.userAccount.lastName = data.lastName;
+                })
+                .catch(error => console.log(error))
+        },
+        deleteAccount() {
+            let url = `http://localhost:3000/api/users/${ this.userAccount.userId }`;
+            let options = {
+                method: "DELETE",
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                }
+            };
+            fetch(url, options)
+                .then((response) => {
+                    console.log(response);
+                    localStorage.clear();
+                    alert("Suppression du compte confirmée ! 😢");
+                })
+                .then(this.$router.push("/signup"))
+                .catch(error => console.log(error))
+        },
+    },
+}
 </script>
 
 <style lang="scss">

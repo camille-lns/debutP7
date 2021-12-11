@@ -19,7 +19,6 @@ const iv = cryptoJS.enc.Base64.parse(process.env.CR_IV);
 // inscription
 exports.signup = (req,res,next) => {
     const codedEmail = cryptoJS.AES.encrypt(req.body.email, key, {iv:iv}).toString();
-    console.log(req.body.email);
     User.findOne({where: {email:codedEmail}})
     .then(user => {
         if (user)
@@ -32,7 +31,7 @@ exports.signup = (req,res,next) => {
                 email:codedEmail, 
                 profilPictureUrl: `${req.protocol}://${req.get('host')}/images/profilepic.png`,
                 password: hashed, 
-                role: user
+                role: 'user'
             })
             .then(() => res.status(201).json({message: "utilisateur créé"}))
             .catch(error => res.status(400).json({error}));

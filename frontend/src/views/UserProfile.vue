@@ -12,7 +12,7 @@
                             divCustomClass="divUserPP"
                             />
                             <p class="user-name">
-                            {{ userAccount.firstname }} {{ userAccount.lastname }}
+                            {{ userAccount.firstName }} {{ userAccount.lastName }}
                             </p>
 
                             <b-button size="sm">Editer</b-button>
@@ -52,7 +52,7 @@ export default {
         }
     },
     mounted() {
-        let url = `http://localhost:3000/api/auth/${ this.userAccount.userId }`;
+        let url = `http://localhost:3000/api/users/${ this.userAccount.userId }`;
         let options = {
             method: "GET",
             headers: {
@@ -63,14 +63,14 @@ export default {
             .then(response => response.json())
             .then(data => {
                 console.log(data)
-                this.userAccount.firstname = data.firstname;
-                this.userAccount.lastname = data.lastname;
+                this.userAccount.firstName = data.firstName;
+                this.userAccount.lastName = data.lastName;
             })
             .catch(error => console.log(error))
     },
     methods: {
         getOneAccount() {
-            let url = `http://localhost:3000/api/auth/${ this.userAccount.userId }`;
+            let url = `http://localhost:3000/api/users/${ this.userAccount.userId }`;
             let options = {
                 method: "GET",
                 headers: {
@@ -81,13 +81,13 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     console.log(data)
-                    this.userAccount.firstname = data.firstname;
-                    this.userAccount.lastname = data.lastname;
+                    this.userAccount.firstName = data.firstName;
+                    this.userAccount.lastName = data.lastName;
                 })
                 .catch(error => console.log(error))
         },
         deleteAccount() {
-            let url = `http://localhost:3000/api/auth/${ this.userAccount.userId }`;
+            let url = `http://localhost:3000/api/users/${ this.userAccount.userId }`;
             let options = {
                 method: "DELETE",
                 headers: {
@@ -98,7 +98,7 @@ export default {
                 .then((response) => {
                     console.log(response);
                     localStorage.clear();
-                    alert("Suppression du compte confirmée ! 😢");
+                    alert("Suppression du compte confirmée");
                 })
                 .then(this.$router.push("/signup"))
                 .catch(error => console.log(error))

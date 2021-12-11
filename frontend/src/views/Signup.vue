@@ -51,7 +51,7 @@
 
                 <center><b-button
                   v-on:click.stop="signup()"
-                  type="submit"
+                  type="button"
                   id="signup-button"
                   class="account-btn font-weight-bold"
                   aria-label="Inscription"
@@ -98,8 +98,8 @@ export default {
     methods: {
         signup() {
             let inputDatas = {
-                "lastname": this.inputSignup.lastname,
-                "firstname": this.inputSignup.firstname,
+                "lastName": this.inputSignup.lastname,
+                "firstName": this.inputSignup.firstname,
                 "email": this.inputSignup.email,
                 "password": this.inputSignup.password
             }
@@ -114,10 +114,7 @@ export default {
             fetch(url, options)
                 .then(res => res.json())
                 .then((res) => {
-                  localStorage.setItem("userId", res.userId);
-                  console.log(localStorage)
-                  this.$router.push("/");
-                  alert("Bienvenue sur Groupomania Connect ! Connectez-vous dès à présent !");
+                  alert("Compte créé avec succès");
                 })
                 .catch(error => console.log(error))
         }
