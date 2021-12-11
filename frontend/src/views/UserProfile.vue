@@ -12,6 +12,7 @@
                             divCustomClass="divUserPP"
                             />
                             <p class="user-name">
+                                Prénom Nom
                             {{ userAccount.firstName }} {{ userAccount.lastName }}
                             </p>
 
@@ -29,7 +30,7 @@
 <script>
 import Navigation from '../components/Navigation.vue'
 import ProfileImg from '../components/ProfileImg.vue'
-import UserPosts from '../components//UserPosts.vue'
+import UserPosts from '../components/UserPosts.vue'
 
 export default {
     name: 'Profile', 
@@ -42,16 +43,17 @@ export default {
         return {
             userAccount: {
                 userId: localStorage.getItem("userId"),
-                firstname: "",
-                lastname: ""
+                firstName: "",
+                lastName: ""
             },
             inputAccount: {
-                lastname: "",
-                firstname: ""
+                lastName: "",
+                firstName: ""
             }
         }
     },
     mounted() {
+        console.log("mounted")
         let url = `http://localhost:3000/api/users/${ this.userAccount.userId }`;
         let options = {
             method: "GET",
@@ -62,7 +64,7 @@ export default {
         fetch(url, options)
             .then(response => response.json())
             .then(data => {
-                console.log(data)
+                console.log("données du serveur", data)
                 this.userAccount.firstName = data.firstName;
                 this.userAccount.lastName = data.lastName;
             })
